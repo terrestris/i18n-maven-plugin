@@ -23,6 +23,9 @@ public class I18nMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
+    @Parameter()
+    private String pathPrefix;
+
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
@@ -30,7 +33,7 @@ public class I18nMojo extends AbstractMojo {
         try {
             Log log = getLog();
             File dir = new File(project.getBasedir(), "src/main/resources/public");
-            File outDir = new File(project.getBasedir(), "target/generated-resources/");
+            File outDir = new File(project.getBasedir(), "target/generated-resources/" + pathPrefix);
             if (!outDir.exists()) {
                 if (!outDir.mkdirs()) {
                     throw new MojoExecutionException("Unable to create output directory.");
