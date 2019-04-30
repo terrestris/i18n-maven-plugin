@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>i18n-maven-plugin</artifactId>
     <packaging>maven-plugin</packaging>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>i18n-maven-plugin</name>
     <description>Maven plugin to combine/disassemble i18n json files</description>
 
@@ -10,7 +10,7 @@
         <connection>scm:git:git://github.com/terrestris/i18n-maven-plugin.git</connection>
         <developerConnection>scm:git:git@github.com:terrestris/i18n-maven-plugin.git</developerConnection>
         <url>https://github.com/terrestris/i18n-maven-plugin.git</url>
-        <tag>i18n-maven-plugin-0.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <parent>
