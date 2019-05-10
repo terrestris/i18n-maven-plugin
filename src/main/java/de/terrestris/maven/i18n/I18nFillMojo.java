@@ -17,38 +17,38 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Overwrite values in the i18n json files. Uses a combined file
- * like the one generated from the combine goal to overwrite
- * the values in the source files. Usage example:<br>
+ * Add missing keys to the translation json files. Usage example:<br>
  *<br>
- * mvn i18n:split -Di18n.file=de.json -Di18n.language<br>
+ * mvn i18n:fill -Di18n.sourceLanguage=de -Di18n.targetLanguage=en<br>
  *<br>
- * Can also be used to add a new translation.
+ * This will add all missing keys in english with a default value
+ * of en:GermanTranslation as value. This can also be used to add
+ * a new translation language.
  */
-@Execute(goal = "split", phase = LifecyclePhase.NONE)
-@Mojo(name = "split")
-public class I18nSplitMojo extends AbstractMojo {
+@Execute(goal = "fill", phase = LifecyclePhase.NONE)
+@Mojo(name = "fill")
+public class I18nFillMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
-
-    /**
-     * The combined input file.
-     */
-    @Parameter(required = true, property = "i18n.file")
-    private String file;
-
-    /**
-     * The language string.
-     */
-    @Parameter(required = true, property = "i18n.language")
-    private String language;
 
     /**
      * Set to false to disable json pretty printing.
      */
     @Parameter(property = "i18n.format", defaultValue = "true")
     private boolean format;
+
+    /**
+     * The source language parameter, e.g. de.
+     */
+    @Parameter(property = "i18n.sourceLanguage", required = true)
+    private String sourceLanguage;
+
+    /**
+     * The target language parameter, e.g. en.
+     */
+    @Parameter(property = "i18n.targetLanguage", required = true)
+    private String targetLanguage;
 
     private ObjectMapper mapper = new ObjectMapper();
 
@@ -59,30 +59,29 @@ public class I18nSplitMojo extends AbstractMojo {
                 mapper.enable(SerializationFeature.INDENT_OUTPUT);
             }
             File dir = new File(project.getBasedir(), "src/main/resources/public");
-            File file = new File(this.file);
-            Map map = mapper.readValue(file, Map.class);
-            splitJsonFile(map, dir);
+            fillMissingValues(dir);
         } catch (Throwable t) {
             throw new MojoExecutionException("Unable to combine json i18n files:", t);
         }
     }
 
-    private void splitJsonFile(Map<Object, Map<Object, Object>> map, File dir) throws IOException {
+    private void fillMissingValues(File dir) throws IOException {
         for (File file : Objects.requireNonNull(dir.listFiles())) {
             if (file.isDirectory()) {
-                splitJsonFile(map, file);
+                fillMissingValues(file);
             }
             if (file.getName().endsWith(".i18n.json")) {
                 Map contents = mapper.readValue(file, Map.class);
-                Map current = (Map) contents.get(language);
-                if (current == null) {
-                    current = new HashMap();
-                    contents.put(language, current);
+                Map source = (Map) contents.get(sourceLanguage);
+                Map target = (Map) contents.get(targetLanguage);
+                if (target == null) {
+                    target = new HashMap();
+                    contents.put(targetLanguage, target);
                 }
-                String name = file.getName().split("\\.")[0];
-                Map newValues = map.get(name);
-                for (Object key : newValues.keySet()) {
-                    current.put(key, newValues.get(key));
+                for (Object key : source.keySet()) {
+                    if (!target.containsKey(key)) {
+                        target.put(key, targetLanguage + ":" + source.get(key));
+                    }
                 }
                 mapper.writeValue(file, contents);
             }

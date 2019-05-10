@@ -17,6 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Combine small json files into a complete translation file. See the
+ * README at https://github.com/terrestris/i18n-maven-plugin/ for details.
+ * It is best integrated into your pom in the generate-resources phase.
+ */
 @Execute(goal = "combine", phase = LifecyclePhase.GENERATE_RESOURCES)
 @Mojo(name = "combine")
 public class I18nMojo extends AbstractMojo {
@@ -27,6 +32,9 @@ public class I18nMojo extends AbstractMojo {
     @Parameter
     private String pathPrefix;
 
+    /**
+     * Set to true to enable pretty printing for the output json.
+     */
     @Parameter(property = "i18n.format", defaultValue = "false")
     private boolean format;
 
