@@ -48,3 +48,14 @@ Configure the plugin in your `pom.xml` like this:
                 </executions>
             </plugin>
 ```
+
+# Split mojo
+
+You can override the json files with values from a combined file like this:
+
+```
+mvn -Di18n:file=de.json -Di18n.language=de i18n:split
+```
+
+This will override all keys in the given language with values set in the
+given file.
