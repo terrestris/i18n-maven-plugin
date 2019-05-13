@@ -48,3 +48,11 @@ Configure the plugin in your `pom.xml` like this:
                 </executions>
             </plugin>
 ```
+
+# Other mojos
+
+See the plugin help for details:
+
+```
+mvn i18n:help -Ddetail=true
+```

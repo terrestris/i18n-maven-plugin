@@ -1,6 +1,7 @@
 package de.terrestris.maven.i18n;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.logging.Log;
@@ -16,6 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Combine small json files into a complete translation file. See the
+ * README at https://github.com/terrestris/i18n-maven-plugin/ for details.
+ * It is best integrated into your pom in the generate-resources phase.
+ */
 @Execute(goal = "combine", phase = LifecyclePhase.GENERATE_RESOURCES)
 @Mojo(name = "combine")
 public class I18nMojo extends AbstractMojo {
@@ -23,14 +29,23 @@ public class I18nMojo extends AbstractMojo {
     @Parameter(defaultValue = "${project}", required = true, readonly = true)
     private MavenProject project;
 
-    @Parameter()
+    @Parameter
     private String pathPrefix;
+
+    /**
+     * Set to true to enable pretty printing for the output json.
+     */
+    @Parameter(property = "i18n.format", defaultValue = "false")
+    private boolean format;
 
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void execute() throws MojoExecutionException {
         try {
+            if (format) {
+                mapper.enable(SerializationFeature.INDENT_OUTPUT);
+            }
             Log log = getLog();
             File dir = new File(project.getBasedir(), "src/main/resources/public");
             File outDir = new File(project.getBasedir(), "target/generated-resources/" + pathPrefix);
