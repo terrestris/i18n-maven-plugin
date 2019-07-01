@@ -51,7 +51,6 @@ class I18nFillMojo : AbstractMojo() {
 
     private val mapper = ObjectMapper()
 
-    @Throws(MojoExecutionException::class)
     override fun execute() {
         try {
             if (format) {
@@ -65,7 +64,6 @@ class I18nFillMojo : AbstractMojo() {
 
     }
 
-    @Throws(IOException::class)
     private fun fillMissingValues(dir: File) {
         for (file in Objects.requireNonNull(dir.listFiles())) {
             if (file.isDirectory) {

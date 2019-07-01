@@ -22,7 +22,7 @@ import java.util.Objects
  */
 @Execute(goal = "combine", phase = LifecyclePhase.GENERATE_RESOURCES)
 @Mojo(name = "combine")
-class I18nMojo : AbstractMojo() {
+class I18nCombineMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}", required = true, readonly = true)
     private val project: MavenProject? = null
@@ -38,7 +38,6 @@ class I18nMojo : AbstractMojo() {
 
     private val mapper = ObjectMapper()
 
-    @Throws(MojoExecutionException::class)
     override fun execute() {
         try {
             if (format) {
@@ -63,7 +62,6 @@ class I18nMojo : AbstractMojo() {
 
     }
 
-    @Throws(IOException::class)
     private fun combineJsonFiles(map: MutableMap<Any, MutableMap<Any, Any>>, dir: File) {
         for (file in Objects.requireNonNull(dir.listFiles())) {
             if (file.isDirectory) {

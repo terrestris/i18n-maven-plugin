@@ -51,7 +51,6 @@ class I18nSplitMojo : AbstractMojo() {
 
     private val mapper = ObjectMapper()
 
-    @Throws(MojoExecutionException::class)
     override fun execute() {
         try {
             if (format) {
@@ -67,7 +66,6 @@ class I18nSplitMojo : AbstractMojo() {
 
     }
 
-    @Throws(IOException::class)
     private fun splitJsonFile(map: Map<String, Any>, dir: File) {
         for (file in Objects.requireNonNull(dir.listFiles())) {
             if (file.isDirectory) {
