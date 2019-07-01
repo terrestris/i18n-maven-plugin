@@ -44,7 +44,6 @@ class I18nMojo : AbstractMojo() {
             if (format) {
                 mapper.enable(SerializationFeature.INDENT_OUTPUT)
             }
-            val log = log
             val dir = File(project!!.basedir, "src/main/resources/public")
             val outDir = File(project.basedir, "target/generated-resources/" + pathPrefix!!)
             if (!outDir.exists()) {
@@ -77,7 +76,7 @@ class I18nMojo : AbstractMojo() {
                     if (!map.containsKey(lang)) {
                         map[lang as Any] = HashMap()
                     }
-                    var currentMap = map[lang]
+                    val currentMap = map[lang]
                     currentMap!![name] = current[lang] as Any
                 }
             }

@@ -41,6 +41,10 @@
     </snapshotRepository>
   </distributionManagement>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
   <build>
     <plugins>
       <plugin>
@@ -87,8 +91,7 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <source>1.11</source>
-              <target>1.11</target>
+              <jvmTarget>11</jvmTarget>
               <sourceDirs>
                 <sourceDir>src/main/kotlin</sourceDir>
               </sourceDirs>
