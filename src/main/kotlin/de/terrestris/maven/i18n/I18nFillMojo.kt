@@ -9,11 +9,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
-
 import java.io.File
-import java.io.IOException
-import java.util.HashMap
-import java.util.Objects
+import java.util.*
 
 /**
  * Add missing keys to the translation json files. Usage example:<br></br>
@@ -56,7 +53,7 @@ class I18nFillMojo : AbstractMojo() {
             if (format) {
                 mapper.enable(SerializationFeature.INDENT_OUTPUT)
             }
-            val dir = File(project!!.basedir, "src/main/resources/public")
+            val dir = File(project.basedir, "src/main/resources/public")
             fillMissingValues(dir)
         } catch (t: Throwable) {
             throw MojoExecutionException("Unable to combine json i18n files:", t)
@@ -75,7 +72,7 @@ class I18nFillMojo : AbstractMojo() {
                 var target = contents[targetLanguage] as MutableMap<String, Any>?
                 if (target == null) {
                     target = HashMap()
-                    contents[targetLanguage as String] = target
+                    contents[targetLanguage] = target
                 }
                 for (key in source!!.keys) {
                     if (!target.containsKey(key)) {

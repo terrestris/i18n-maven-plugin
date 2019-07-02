@@ -3,17 +3,13 @@ package de.terrestris.maven.i18n
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import org.apache.maven.plugin.AbstractMojo
-import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Execute
 import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
-
 import java.io.File
-import java.io.IOException
-import java.util.HashMap
-import java.util.Objects
+import java.util.*
 
 /**
  * Overwrite values in the i18n json files. Uses a combined file
@@ -52,18 +48,13 @@ class I18nSplitMojo : AbstractMojo() {
     private val mapper = ObjectMapper()
 
     override fun execute() {
-        try {
-            if (format) {
-                mapper.enable(SerializationFeature.INDENT_OUTPUT)
-            }
-            val dir = File(project!!.basedir, "src/main/resources/public")
-            val file = File(this.file!!)
-            val map = mapper.readValue(file, Map::class.java) as Map<String, Any>
-            splitJsonFile(map, dir)
-        } catch (t: Throwable) {
-            throw MojoExecutionException("Unable to combine json i18n files:", t)
+        if (format) {
+            mapper.enable(SerializationFeature.INDENT_OUTPUT)
         }
-
+        val dir = File(project.basedir, "src/main/resources/public")
+        val file = File(this.file)
+        val map = mapper.readValue(file, Map::class.java) as Map<String, Any>
+        splitJsonFile(map, dir)
     }
 
     private fun splitJsonFile(map: Map<String, Any>, dir: File) {
@@ -76,7 +67,7 @@ class I18nSplitMojo : AbstractMojo() {
                 var current = contents.get(language) as MutableMap<String, Any>?
                 if (current == null) {
                     current = HashMap()
-                    contents[language as String] = current
+                    contents[language] = current
                 }
                 val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
                 val newValues = map[name] as MutableMap<String, String>

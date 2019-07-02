@@ -40,8 +40,8 @@ class I18nCombineMojo : AbstractMojo() {
             if (format) {
                 mapper.enable(SerializationFeature.INDENT_OUTPUT)
             }
-            val dir = File(project!!.basedir, "src/main/resources/public")
-            val outDir = File(project.basedir, "target/generated-resources/" + pathPrefix!!)
+            val dir = File(project.basedir, "src/main/resources/public")
+            val outDir = File(project.basedir, "target/generated-resources/$pathPrefix")
             if (!outDir.exists()) {
                 if (!outDir.mkdirs()) {
                     throw MojoExecutionException("Unable to create output directory.")
