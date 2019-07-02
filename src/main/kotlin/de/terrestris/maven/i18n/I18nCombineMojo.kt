@@ -9,11 +9,8 @@ import org.apache.maven.plugins.annotations.LifecyclePhase
 import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
-
 import java.io.File
-import java.io.IOException
-import java.util.HashMap
-import java.util.Objects
+import java.util.*
 
 /**
  * Combine small json files into a complete translation file. See the
@@ -25,10 +22,10 @@ import java.util.Objects
 class I18nCombineMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}", required = true, readonly = true)
-    private val project: MavenProject? = null
+    private lateinit var project: MavenProject
 
     @Parameter
-    private val pathPrefix: String? = null
+    private lateinit var pathPrefix: String
 
     /**
      * Set to true to enable pretty printing for the output json.

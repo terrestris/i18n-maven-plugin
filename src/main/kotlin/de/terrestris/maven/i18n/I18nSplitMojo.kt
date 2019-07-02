@@ -29,19 +29,19 @@ import java.util.Objects
 class I18nSplitMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}", required = true, readonly = true)
-    private val project: MavenProject? = null
+    private lateinit var project: MavenProject
 
     /**
      * The combined input file.
      */
     @Parameter(required = true, property = "i18n.file")
-    private val file: String? = null
+    private lateinit var file: String
 
     /**
      * The language string.
      */
     @Parameter(required = true, property = "i18n.language")
-    private val language: String? = null
+    private lateinit var language: String
 
     /**
      * Set to false to disable json pretty printing.

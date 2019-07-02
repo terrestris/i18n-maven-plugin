@@ -29,7 +29,7 @@ import java.util.Objects
 class I18nFillMojo : AbstractMojo() {
 
     @Parameter(defaultValue = "\${project}", required = true, readonly = true)
-    private val project: MavenProject? = null
+    private lateinit var project: MavenProject
 
     /**
      * Set to false to disable json pretty printing.
@@ -41,13 +41,13 @@ class I18nFillMojo : AbstractMojo() {
      * The source language parameter, e.g. de.
      */
     @Parameter(property = "i18n.sourceLanguage", required = true)
-    private val sourceLanguage: String? = null
+    private lateinit var sourceLanguage: String
 
     /**
      * The target language parameter, e.g. en.
      */
     @Parameter(property = "i18n.targetLanguage", required = true)
-    private val targetLanguage: String? = null
+    private lateinit var targetLanguage: String
 
     private val mapper = ObjectMapper()
 
