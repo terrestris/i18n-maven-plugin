@@ -2,6 +2,8 @@ package de.terrestris.maven.i18n
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Execute
@@ -10,7 +12,6 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import java.io.File
-import java.util.*
 
 /**
  * Add missing keys to the translation json files. Usage example:<br></br>
@@ -48,6 +49,8 @@ class I18nFillMojo : AbstractMojo() {
 
     private val mapper = ObjectMapper()
 
+    private val factory = JsonNodeFactory(false)
+
     override fun execute() {
         try {
             if (format) {
@@ -62,21 +65,22 @@ class I18nFillMojo : AbstractMojo() {
     }
 
     private fun fillMissingValues(dir: File) {
-        for (file in Objects.requireNonNull(dir.listFiles())) {
+        val files = dir.listFiles() ?: return
+        for (file in files) {
             if (file.isDirectory) {
                 fillMissingValues(file)
             }
             if (file.name.endsWith(".i18n.json")) {
-                val contents = mapper.readValue(file, Map::class.java) as MutableMap<String, Any>
-                val source = contents[sourceLanguage] as MutableMap<String, Any>?
-                var target = contents[targetLanguage] as MutableMap<String, Any>?
+                val contents = mapper.readTree(file) as ObjectNode
+                val source = contents.get(sourceLanguage) as ObjectNode
+                var target = contents.get(targetLanguage) as ObjectNode?
                 if (target == null) {
-                    target = HashMap()
-                    contents[targetLanguage] = target
+                    target = factory.objectNode()
+                    contents.set(targetLanguage, target)
                 }
-                for (key in source!!.keys) {
-                    if (!target.containsKey(key)) {
-                        target[key ] = """$targetLanguage:${source[key]}""" as Any
+                for (key in source.fieldNames()) {
+                    if (!target!!.has(key)) {
+                        target.set(key, factory.textNode("""$targetLanguage:${source.get(key).asText()}"""))
                     }
                 }
                 mapper.writeValue(file, contents)

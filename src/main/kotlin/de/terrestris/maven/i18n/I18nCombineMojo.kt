@@ -2,6 +2,8 @@ package de.terrestris.maven.i18n
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugin.MojoExecutionException
 import org.apache.maven.plugins.annotations.Execute
@@ -10,7 +12,6 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import java.io.File
-import java.util.*
 
 /**
  * Combine small json files into a complete translation file. See the
@@ -35,6 +36,8 @@ class I18nCombineMojo : AbstractMojo() {
 
     private val mapper = ObjectMapper()
 
+    private val factory = JsonNodeFactory(false)
+
     override fun execute() {
         try {
             if (format) {
@@ -47,11 +50,11 @@ class I18nCombineMojo : AbstractMojo() {
                     throw MojoExecutionException("Unable to create output directory.")
                 }
             }
-            val map = HashMap<Any, MutableMap<Any, Any>>()
-            combineJsonFiles(map, dir)
-            log.info("Found i18n languages: " + map.keys)
-            for (key in map.keys) {
-                mapper.writeValue(File(outDir, "$key.json"), map[key])
+            val node = factory.objectNode()
+            combineJsonFiles(node, dir)
+            log.info("Found i18n languages: " + node.fieldNames())
+            for (key in node.fieldNames()) {
+                mapper.writeValue(File(outDir, "$key.json"), node.get(key))
             }
         } catch (e: Exception) {
             throw MojoExecutionException("Unable to combine json i18n files:", e)
@@ -59,20 +62,21 @@ class I18nCombineMojo : AbstractMojo() {
 
     }
 
-    private fun combineJsonFiles(map: MutableMap<Any, MutableMap<Any, Any>>, dir: File) {
-        for (file in Objects.requireNonNull(dir.listFiles())) {
+    private fun combineJsonFiles(node: ObjectNode, dir: File) {
+        val files = dir.listFiles() ?: return
+        for (file in files) {
             if (file.isDirectory) {
-                combineJsonFiles(map, file)
+                combineJsonFiles(node, file)
             }
             if (file.name.endsWith(".i18n.json")) {
-                val current = mapper.readValue(file, Map::class.java)
+                val current = mapper.readTree(file) as ObjectNode
                 val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-                for (lang in current.keys) {
-                    if (!map.containsKey(lang)) {
-                        map[lang as Any] = HashMap()
+                for (lang in current.fieldNames()) {
+                    if (!node.has(lang)) {
+                        node.set(lang, factory.objectNode())
                     }
-                    val currentMap = map[lang]
-                    currentMap!![name] = current[lang] as Any
+                    val currentMap = node.get(lang) as ObjectNode
+                    currentMap.set(name, current.get(lang))
                 }
             }
         }

@@ -2,6 +2,8 @@ package de.terrestris.maven.i18n
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.databind.node.JsonNodeFactory
+import com.fasterxml.jackson.databind.node.ObjectNode
 import org.apache.maven.plugin.AbstractMojo
 import org.apache.maven.plugins.annotations.Execute
 import org.apache.maven.plugins.annotations.LifecyclePhase
@@ -9,7 +11,6 @@ import org.apache.maven.plugins.annotations.Mojo
 import org.apache.maven.plugins.annotations.Parameter
 import org.apache.maven.project.MavenProject
 import java.io.File
-import java.util.*
 
 /**
  * Overwrite values in the i18n json files. Uses a combined file
@@ -47,32 +48,35 @@ class I18nSplitMojo : AbstractMojo() {
 
     private val mapper = ObjectMapper()
 
+    private val factory = JsonNodeFactory(false)
+
     override fun execute() {
         if (format) {
             mapper.enable(SerializationFeature.INDENT_OUTPUT)
         }
         val dir = File(project.basedir, "src/main/resources/public")
         val file = File(this.file)
-        val map = mapper.readValue(file, Map::class.java) as Map<String, Any>
+        val map = mapper.readTree(file) as ObjectNode
         splitJsonFile(map, dir)
     }
 
-    private fun splitJsonFile(map: Map<String, Any>, dir: File) {
-        for (file in Objects.requireNonNull(dir.listFiles())) {
+    private fun splitJsonFile(node: ObjectNode, dir: File) {
+        val files = dir.listFiles() ?: return
+        for (file in files) {
             if (file.isDirectory) {
-                splitJsonFile(map, file)
+                splitJsonFile(node, file)
             }
             if (file.name.endsWith(".i18n.json")) {
-                val contents = mapper.readValue(file, MutableMap::class.java) as MutableMap<String, Any>
-                var current = contents.get(language) as MutableMap<String, Any>?
+                val contents = mapper.readTree(file) as ObjectNode
+                var current: ObjectNode? = contents.get(language) as ObjectNode?
                 if (current == null) {
-                    current = HashMap()
-                    contents[language] = current
+                    current = factory.objectNode()
+                    contents.set(language, current)
                 }
                 val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
-                val newValues = map[name] as MutableMap<String, String>
-                for (key in newValues.keys) {
-                    current[key] = newValues[key] as String
+                val newValues = node.get(name) as ObjectNode
+                for (key in newValues.fieldNames()) {
+                    current!!.set(key, newValues.get(key))
                 }
                 mapper.writeValue(file, contents)
             }
