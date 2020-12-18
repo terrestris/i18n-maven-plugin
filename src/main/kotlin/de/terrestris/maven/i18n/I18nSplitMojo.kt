@@ -73,7 +73,7 @@ class I18nSplitMojo : AbstractMojo() {
                     current = factory.objectNode()
                     contents.set(language, current)
                 }
-                val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+                val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.first()
                 val newValues = node.get(name) as ObjectNode
                 for (key in newValues.fieldNames()) {
                     current!!.set(key, newValues.get(key))

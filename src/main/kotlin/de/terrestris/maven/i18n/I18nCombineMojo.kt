@@ -70,7 +70,7 @@ class I18nCombineMojo : AbstractMojo() {
             }
             if (file.name.endsWith(".i18n.json")) {
                 val current = mapper.readTree(file) as ObjectNode
-                val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0]
+                val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.first()
                 for (lang in current.fieldNames()) {
                     if (!node.has(lang)) {
                         node.set(lang, factory.objectNode())
