@@ -1,5 +1,6 @@
 package de.terrestris.maven.i18n
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
@@ -73,10 +74,10 @@ class I18nCombineMojo : AbstractMojo() {
                 val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.first()
                 for (lang in current.fieldNames()) {
                     if (!node.has(lang)) {
-                        node.set(lang, factory.objectNode())
+                        node.set<JsonNode>(lang, factory.objectNode())
                     }
                     val currentMap = node.get(lang) as ObjectNode
-                    currentMap.set(name, current.get(lang))
+                    currentMap.set<JsonNode>(name, current.get(lang))
                 }
             }
         }

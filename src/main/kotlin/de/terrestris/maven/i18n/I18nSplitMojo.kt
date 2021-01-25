@@ -1,5 +1,6 @@
 package de.terrestris.maven.i18n
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
@@ -71,12 +72,12 @@ class I18nSplitMojo : AbstractMojo() {
                 var current: ObjectNode? = contents.get(language) as ObjectNode?
                 if (current == null) {
                     current = factory.objectNode()
-                    contents.set(language, current)
+                    contents.set<JsonNode>(language, current)
                 }
                 val name = file.name.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.first()
                 val newValues = node.get(name) as ObjectNode
                 for (key in newValues.fieldNames()) {
-                    current!!.set(key, newValues.get(key))
+                    current!!.set<JsonNode>(key, newValues.get(key))
                 }
                 mapper.writeValue(file, contents)
             }

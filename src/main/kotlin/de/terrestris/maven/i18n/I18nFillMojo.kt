@@ -1,5 +1,6 @@
 package de.terrestris.maven.i18n
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.databind.node.JsonNodeFactory
@@ -76,11 +77,11 @@ class I18nFillMojo : AbstractMojo() {
                 var target = contents.get(targetLanguage) as ObjectNode?
                 if (target == null) {
                     target = factory.objectNode()
-                    contents.set(targetLanguage, target)
+                    contents.set<JsonNode>(targetLanguage, target)
                 }
                 for (key in source.fieldNames()) {
                     if (!target!!.has(key)) {
-                        target.set(key, factory.textNode("""$targetLanguage:${source.get(key).asText()}"""))
+                        target.set<JsonNode>(key, factory.textNode("""$targetLanguage:${source.get(key).asText()}"""))
                     }
                 }
                 mapper.writeValue(file, contents)
