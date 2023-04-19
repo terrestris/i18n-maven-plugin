@@ -1,7 +1,9 @@
 package de.terrestris.maven.i18n;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -12,8 +14,8 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 /**
@@ -60,29 +62,30 @@ public class I18nSplitMojo extends AbstractMojo {
       }
       File dir = new File(project.getBasedir(), "src/main/resources/public");
       File file = new File(this.file);
-      Map map = mapper.readValue(file, Map.class);
-      splitJsonFile(map, dir);
+      JsonNode root = mapper.readTree(file);
+      splitJsonFile(root, dir);
     } catch (Throwable t) {
       throw new MojoExecutionException("Unable to combine json i18n files:", t);
     }
   }
 
-  private void splitJsonFile(Map<Object, Map<Object, Object>> map, File dir) throws IOException {
+  private void splitJsonFile(JsonNode root, File dir) throws IOException {
     for (File file : Objects.requireNonNull(dir.listFiles())) {
       if (file.isDirectory()) {
-        splitJsonFile(map, file);
+        splitJsonFile(root, file);
       }
       if (file.getName().endsWith(".i18n.json")) {
-        Map contents = mapper.readValue(file, Map.class);
-        Map current = (Map) contents.get(language);
+        ObjectNode contents = (ObjectNode) mapper.readTree(file);
+        ObjectNode current = (ObjectNode) contents.get(language);
         if (current == null) {
-          current = new HashMap();
-          contents.put(language, current);
+          current = mapper.createObjectNode();
+          contents.set(language, current);
         }
         String name = file.getName().split("\\.")[0];
-        Map newValues = map.get(name);
-        for (Object key : newValues.keySet()) {
-          current.put(key, newValues.get(key));
+        JsonNode newValues = root.get(name);
+        for (Iterator<Entry<String, JsonNode>> it = newValues.fields(); it.hasNext(); ) {
+          Entry<String, JsonNode> field = it.next();
+          current.set(field.getKey(), field.getValue());
         }
         mapper.writeValue(file, contents);
       }

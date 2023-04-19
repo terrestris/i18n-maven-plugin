@@ -1,7 +1,10 @@
 package de.terrestris.maven.i18n;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Iterators;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.Execute;
@@ -14,8 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Objects;
 
 
@@ -57,31 +60,38 @@ public class I18nCombineMojo extends AbstractMojo {
           throw new MojoExecutionException("Unable to create output directory.");
         }
       }
-      Map<Object, Map<Object, Object>> map = new HashMap<>();
-      combineJsonFiles(map, dir);
-      LOG.info("Found i18n languages: " + map.keySet());
-      for (Object key : map.keySet()) {
-        mapper.writeValue(new File(outDir, key + ".json"), map.get(key));
+      if (!dir.exists()) {
+        LOG.info("No public directory found, skipping i18n generation.");
+        return;
+      }
+      ObjectNode root = mapper.createObjectNode();
+      combineJsonFiles(root, dir);
+      LOG.info("Found i18n languages: " + Iterators.toString(root.fieldNames()));
+      for (Iterator<Entry<String, JsonNode>> it = root.fields(); it.hasNext(); ) {
+        Entry<String, JsonNode> field = it.next();
+        mapper.writeValue(new File(outDir, field.getKey() + ".json"), field.getValue());
       }
     } catch (Throwable t) {
       throw new MojoExecutionException("Unable to combine json i18n files:", t);
     }
   }
 
-  private void combineJsonFiles(Map<Object, Map<Object, Object>> map, File dir) throws IOException {
+  private void combineJsonFiles(ObjectNode root, File dir) throws IOException {
     for (File file : Objects.requireNonNull(dir.listFiles())) {
       if (file.isDirectory()) {
-        combineJsonFiles(map, file);
+        combineJsonFiles(root, file);
       }
       if (file.getName().endsWith(".i18n.json")) {
-        Map current = mapper.readValue(file, Map.class);
+        JsonNode current = mapper.readTree(file);
         String name = file.getName().split("\\.")[0];
-        for (Object lang : current.keySet()) {
-          if (!map.containsKey(lang)) {
-            map.put(lang, new HashMap<>());
+        for (Iterator<Entry<String, JsonNode>> it = current.fields(); it.hasNext(); ) {
+          Entry<String, JsonNode> field = it.next();
+          String lang = field.getKey();
+          if (!root.has(lang)) {
+            root.set(lang, mapper.createObjectNode());
           }
-          Map<Object, Object> currentMap = map.get(lang);
-          currentMap.put(name, current.get(lang));
+          ObjectNode currentMap = (ObjectNode) root.get(lang);
+          currentMap.set(name, field.getValue().get(lang));
         }
       }
     }
