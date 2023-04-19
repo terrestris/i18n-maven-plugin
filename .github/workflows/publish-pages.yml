@@ -1,0 +1,40 @@
+name: Publish mvn site to gh-pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - name: Checkout sources 🔰
+      uses: actions/checkout@v3
+
+    - name: Set up Java 11 ⏬
+      uses: actions/setup-java@v3.11.0
+      with:
+        distribution: temurin
+        java-version: 11
+        java-package: jdk
+        architecture: x64
+
+    - name: Handle caching of maven repository 💾
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
+    - name: Build maven site 🏗️
+      run: mvn -B -P reporting surefire-report:report site
+
+    - name: Deploy 🚀
+      uses: JamesIves/github-pages-deploy-action@v4.4.1
+      with:
+        branch: gh-pages
+        folder: target/site

@@ -45,11 +45,17 @@
       <name>Nexus Snapshot Repository</name>
       <url>https://nexus.terrestris.de/repository/misc/</url>
     </snapshotRepository>
+    <site>
+      <id>github</id>
+      <url>scm:git:git@github.com:terrestris/i18n-maven-plugin.git</url>
+    </site>
   </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <downloadSources>true</downloadSources>
+    <downloadJavadocs>true</downloadJavadocs>
   </properties>
 
 
@@ -115,7 +121,43 @@
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.12.1</version>
+          <version>4.0.0-M7</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.skins</groupId>
+              <artifactId>maven-fluido-skin</artifactId>
+              <version>2.0.0-M5</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-sink-api</artifactId>
+              <version>2.0.0-M6</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-site-renderer</artifactId>
+              <version>2.0.0-M7</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-core</artifactId>
+              <version>2.0.0-M6</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-decoration-model</artifactId>
+              <version>2.0.0-M5</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-integration-tools</artifactId>
+              <version>2.0.0-M7</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -299,20 +341,6 @@
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
         <version>1.2</version>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.maven.doxia</groupId>
-        <artifactId>doxia-sink-api</artifactId>
-        <version>2.0.0-M6</version>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.maven.doxia</groupId>
-        <artifactId>doxia-logging-api</artifactId>
-        <version>1.12.0</version>
         <scope>provided</scope>
       </dependency>
 
@@ -502,6 +530,6 @@
       <groupId>org.jetbrains.kotlin</groupId>
       <artifactId>kotlin-stdlib</artifactId>
     </dependency>
- </dependencies>
+  </dependencies>
 
 </project>
