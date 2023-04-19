@@ -9,11 +9,11 @@ jobs:
     - name: Checkout sources 🔰
       uses: actions/checkout@v3
 
-    - name: Set up Java 11 ☕♨️
+    - name: Set up Java 17 ☕♨️
       uses: actions/setup-java@v3.11.0
       with:
         distribution: temurin
-        java-version: 11
+        java-version: 17
         java-package: jdk
         architecture: x64
 
