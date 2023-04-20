@@ -45,11 +45,17 @@
       <name>Nexus Snapshot Repository</name>
       <url>https://nexus.terrestris.de/repository/misc/</url>
     </snapshotRepository>
+    <site>
+      <id>github</id>
+      <url>scm:git:git@github.com:terrestris/i18n-maven-plugin.git</url>
+    </site>
   </distributionManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <downloadSources>true</downloadSources>
+    <downloadJavadocs>true</downloadJavadocs>
   </properties>
 
 
@@ -90,7 +96,6 @@
   </profiles>
 
   <build>
-    <sourceDirectory>src/main/kotlin</sourceDirectory>
     <pluginManagement>
       <plugins>
         <plugin>
@@ -115,7 +120,43 @@
         </plugin>
         <plugin>
           <artifactId>maven-site-plugin</artifactId>
-          <version>3.12.1</version>
+          <version>4.0.0-M7</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.skins</groupId>
+              <artifactId>maven-fluido-skin</artifactId>
+              <version>2.0.0-M5</version>
+            </dependency>
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-sink-api</artifactId>
+              <version>2.0.0-M6</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-site-renderer</artifactId>
+              <version>2.0.0-M8</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-core</artifactId>
+              <version>2.0.0-M6</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-decoration-model</artifactId>
+              <version>2.0.0-M6</version>
+            </dependency>
+
+            <dependency>
+              <groupId>org.apache.maven.doxia</groupId>
+              <artifactId>doxia-integration-tools</artifactId>
+              <version>2.0.0-M8</version>
+            </dependency>
+          </dependencies>
         </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
@@ -175,32 +216,6 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.jetbrains.kotlin</groupId>
-        <artifactId>kotlin-maven-plugin</artifactId>
-        <version>1.8.20</version>
-        <executions>
-          <execution>
-            <id>compile</id>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-            <phase>process-sources</phase>
-            <configuration>
-              <jvmTarget>1.8</jvmTarget>
-              <sourceDirs>
-                <sourceDir>src/main/kotlin</sourceDir>
-              </sourceDirs>
-            </configuration>
-          </execution>
-          <execution>
-            <id>test-compile</id>
-            <goals>
-              <goal>test-compile</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <configuration>
@@ -212,18 +227,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-plugin-plugin</artifactId>
         <version>3.8.1</version>
-        <configuration>
-          <extractors>
-            <extractor>kotlin</extractor>
-          </extractors>
-        </configuration>
-        <dependencies>
-          <dependency>
-            <groupId>com.github.gantsign.maven.plugin-tools</groupId>
-            <artifactId>kotlin-maven-plugin-tools</artifactId>
-            <version>1.1.0</version>
-          </dependency>
-        </dependencies>
         <executions>
           <execution>
             <id>default-descriptor</id>
@@ -303,20 +306,6 @@
       </dependency>
 
       <dependency>
-        <groupId>org.apache.maven.doxia</groupId>
-        <artifactId>doxia-sink-api</artifactId>
-        <version>2.0.0-M6</version>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.maven.doxia</groupId>
-        <artifactId>doxia-logging-api</artifactId>
-        <version>1.12.0</version>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
         <groupId>org.apache.velocity</groupId>
         <artifactId>velocity</artifactId>
         <version>1.7</version>
@@ -347,14 +336,14 @@
       <dependency>
         <groupId>org.apache.maven.reporting</groupId>
         <artifactId>maven-reporting-api</artifactId>
-        <version>3.1.1</version>
+        <version>4.0.0-M6</version>
         <scope>provided</scope>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven.reporting</groupId>
         <artifactId>maven-reporting-impl</artifactId>
-        <version>3.2.0</version>
+        <version>4.0.0-M7</version>
         <scope>provided</scope>
       </dependency>
 
@@ -382,14 +371,14 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-model</artifactId>
-        <version>3.9.1</version>
+        <version>4.0.0-alpha-5</version>
         <scope>provided</scope>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-artifact</artifactId>
-        <version>3.9.1</version>
+        <version>4.0.0-alpha-5</version>
         <scope>provided</scope>
       </dependency>
 
@@ -403,20 +392,14 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-plugin-api</artifactId>
-        <version>3.9.1</version>
+        <version>4.0.0-alpha-5</version>
         <scope>provided</scope>
       </dependency>
 
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
-        <version>2.14.2</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.jetbrains.kotlin</groupId>
-        <artifactId>kotlin-stdlib</artifactId>
-        <version>1.8.20</version>
+        <version>2.15.0-rc3</version>
       </dependency>
 
       <dependency>
@@ -446,13 +429,19 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-repository-metadata</artifactId>
-        <version>3.9.1</version>
+        <version>4.0.0-alpha-5</version>
       </dependency>
 
       <dependency>
         <groupId>org.eclipse.sisu</groupId>
         <artifactId>org.eclipse.sisu.plexus</artifactId>
         <version>0.9.0.M1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>31.1-jre</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -499,9 +488,9 @@
     </dependency>
 
     <dependency>
-      <groupId>org.jetbrains.kotlin</groupId>
-      <artifactId>kotlin-stdlib</artifactId>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
     </dependency>
- </dependencies>
+  </dependencies>
 
 </project>

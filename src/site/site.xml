@@ -1,0 +1,25 @@
+<project name="i18n maven plugin">
+  <skin>
+    <groupId>org.apache.maven.skins</groupId>
+    <artifactId>maven-fluido-skin</artifactId>
+    <version>2.0.0-M5</version>
+  </skin>
+  <custom>
+    <fluidoSkin>
+      <sideBarEnabled>true</sideBarEnabled>
+      <gitHub>
+        <projectId>terrestris/i18n-maven-plugin</projectId>
+        <ribbonOrientation>right</ribbonOrientation>
+        <ribbonColor>gray</ribbonColor>
+      </gitHub>
+    </fluidoSkin>
+  </custom>
+  <body>
+    <menu ref="reports" inherit="top"/>
+    <links>
+      <item name="terrestris" href="https://www.terrestris.de"/>
+      <item name="Repository" href="https://github.com/terrestris/i18n-maven-plugin"/>
+    </links>
+    <footer><![CDATA[© 2023-present terrestris GmbH &amp; Co. KG <span class="divider">|</span>]]></footer>
+  </body>
+</project>
