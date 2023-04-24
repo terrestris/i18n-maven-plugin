@@ -202,8 +202,8 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <source>11</source>
-              <target>11</target>
+              <source>17</source>
+              <target>17</target>
             </configuration>
           </execution>
           <execution>
@@ -275,6 +275,19 @@
             </execution>
           </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.15.0</version>
+        <configuration>
+          <ruleSet>
+            <ignoreVersion>
+              <type>regex</type>
+              <version>[0-9]{3}.*|99.*|.*TYCHO.*|.*SONATYPE.*</version>
+            </ignoreVersion>
+          </ruleSet>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -284,6 +297,18 @@
         <groupId>commons-beanutils</groupId>
         <artifactId>commons-beanutils</artifactId>
         <version>1.9.4</version>
+      </dependency>
+
+      <dependency>
+        <groupId>commons-io</groupId>
+        <artifactId>commons-io</artifactId>
+        <version>2.11.0</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-compat</artifactId>
+        <version>4.0.0-alpha-5</version>
       </dependency>
 
       <dependency>
@@ -442,6 +467,12 @@
         <groupId>com.google.guava</groupId>
         <artifactId>guava</artifactId>
         <version>31.1-jre</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>2.0.7</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
