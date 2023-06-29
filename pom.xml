@@ -454,7 +454,7 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-repository-metadata</artifactId>
-        <version>4.0.0-alpha-5</version>
+        <version>4.0.0-alpha-7</version>
       </dependency>
 
       <dependency>
