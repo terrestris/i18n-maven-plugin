@@ -70,7 +70,7 @@ public class I18nFillMojo extends AbstractMojo {
         return;
       }
       fillMissingValues(dir);
-    } catch (Throwable t) {
+    } catch (Exception t) {
       throw new MojoExecutionException("Unable to combine json i18n files:", t);
     }
   }

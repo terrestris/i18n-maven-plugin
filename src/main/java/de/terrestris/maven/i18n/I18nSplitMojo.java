@@ -61,33 +61,33 @@ public class I18nSplitMojo extends AbstractMojo {
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
       }
       File dir = new File(project.getBasedir(), "src/main/resources/public");
-      File file = new File(this.file);
-      JsonNode root = mapper.readTree(file);
+      File f = new File(this.file);
+      JsonNode root = mapper.readTree(f);
       splitJsonFile(root, dir);
-    } catch (Throwable t) {
+    } catch (Exception t) {
       throw new MojoExecutionException("Unable to combine json i18n files:", t);
     }
   }
 
   private void splitJsonFile(JsonNode root, File dir) throws IOException {
-    for (File file : Objects.requireNonNull(dir.listFiles())) {
-      if (file.isDirectory()) {
-        splitJsonFile(root, file);
+    for (File f : Objects.requireNonNull(dir.listFiles())) {
+      if (f.isDirectory()) {
+        splitJsonFile(root, f);
       }
-      if (file.getName().endsWith(".i18n.json")) {
-        ObjectNode contents = (ObjectNode) mapper.readTree(file);
+      if (f.getName().endsWith(".i18n.json")) {
+        ObjectNode contents = (ObjectNode) mapper.readTree(f);
         ObjectNode current = (ObjectNode) contents.get(language);
         if (current == null) {
           current = mapper.createObjectNode();
           contents.set(language, current);
         }
-        String name = file.getName().split("\\.")[0];
+        String name = f.getName().split("\\.")[0];
         JsonNode newValues = root.get(name);
         for (Iterator<Entry<String, JsonNode>> it = newValues.fields(); it.hasNext(); ) {
           Entry<String, JsonNode> field = it.next();
           current.set(field.getKey(), field.getValue());
         }
-        mapper.writeValue(file, contents);
+        mapper.writeValue(f, contents);
       }
     }
   }

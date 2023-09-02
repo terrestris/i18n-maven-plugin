@@ -55,10 +55,8 @@ public class I18nCombineMojo extends AbstractMojo {
       }
       File dir = new File(project.getBasedir(), "src/main/resources/public");
       File outDir = new File(project.getBasedir(), "target/generated-resources/" + pathPrefix);
-      if (!outDir.exists()) {
-        if (!outDir.mkdirs()) {
-          throw new MojoExecutionException("Unable to create output directory.");
-        }
+      if (!outDir.exists() && !outDir.mkdirs()) {
+        throw new MojoExecutionException("Unable to create output directory.");
       }
       if (!dir.exists()) {
         LOG.info("No public directory found, skipping i18n generation.");
@@ -66,12 +64,14 @@ public class I18nCombineMojo extends AbstractMojo {
       }
       ObjectNode root = mapper.createObjectNode();
       combineJsonFiles(root, dir);
-      LOG.info("Found i18n languages: " + Iterators.toString(root.fieldNames()));
+      if (LOG.isInfoEnabled()) {
+        LOG.info("Found i18n languages: {}", Iterators.toString(root.fieldNames()));
+      }
       for (Iterator<Entry<String, JsonNode>> it = root.fields(); it.hasNext(); ) {
         Entry<String, JsonNode> field = it.next();
         mapper.writeValue(new File(outDir, field.getKey() + ".json"), field.getValue());
       }
-    } catch (Throwable t) {
+    } catch (Exception t) {
       throw new MojoExecutionException("Unable to combine json i18n files:", t);
     }
   }

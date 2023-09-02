@@ -56,6 +56,9 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <downloadSources>true</downloadSources>
     <downloadJavadocs>true</downloadJavadocs>
+    <sonar.host.url>https://sq.terrestris.de</sonar.host.url>
+    <sonar.login>terrestris</sonar.login>
+    <sonar.sources>src/main/</sonar.sources>
   </properties>
 
 
@@ -98,6 +101,11 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.9.1.2184</version>
+        </plugin>
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.3.1</version>
