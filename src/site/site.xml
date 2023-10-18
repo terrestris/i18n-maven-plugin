@@ -1,4 +1,4 @@
-<project name="i18n maven plugin">
+<site name="i18n maven plugin">
   <skin>
     <groupId>org.apache.maven.skins</groupId>
     <artifactId>maven-fluido-skin</artifactId>
@@ -22,4 +22,4 @@
     </links>
     <footer><![CDATA[© 2023-present terrestris GmbH &amp; Co. KG <span class="divider">|</span>]]></footer>
   </body>
-</project>
+</site>
