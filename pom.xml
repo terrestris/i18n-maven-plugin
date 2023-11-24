@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>i18n-maven-plugin</artifactId>
   <packaging>maven-plugin</packaging>
-  <version>1.0.1</version>
+  <version>1.0.2-SNAPSHOT</version>
   <name>i18n-maven-plugin</name>
   <groupId>de.terrestris</groupId>
   <description>Maven plugin to work with i18n json files</description>
@@ -11,7 +11,7 @@
     <connection>scm:git:git://github.com/terrestris/i18n-maven-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:terrestris/i18n-maven-plugin.git</developerConnection>
     <url>https://github.com/terrestris/i18n-maven-plugin.git</url>
-    <tag>v1.0.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <repositories>
