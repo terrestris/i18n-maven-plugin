@@ -59,6 +59,7 @@
     <sonar.host.url>https://sq.terrestris.de</sonar.host.url>
     <sonar.login>terrestris</sonar.login>
     <sonar.sources>src/main/</sonar.sources>
+    <maven-core.version>4.0.0-alpha-9</maven-core.version>
   </properties>
 
 
@@ -316,7 +317,7 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-compat</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
       </dependency>
 
       <dependency>
@@ -404,14 +405,14 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-model</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
         <scope>provided</scope>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-artifact</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
         <scope>provided</scope>
       </dependency>
 
@@ -425,7 +426,7 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-plugin-api</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
         <scope>provided</scope>
       </dependency>
 
@@ -462,7 +463,7 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-repository-metadata</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
       </dependency>
 
       <dependency>
@@ -486,31 +487,31 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-settings</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-xml-impl</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-settings-builder</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-model-builder</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-core</artifactId>
-        <version>4.0.0-alpha-9</version>
+        <version>${maven-core.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
