@@ -32,4 +32,4 @@ jobs:
       run: mvn -B -P reporting surefire-report:report site
 
     - name: Analyse code and publish to SonarQube 📊
-      run: mvn -B -Dsonar.password=${{ secrets.SONAR_PASSWORD }} sonar:sonar
+      run: mvn -B -Dsonar.token=${{ secrets.SONAR_TOKEN }} sonar:sonar

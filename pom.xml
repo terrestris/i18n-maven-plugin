@@ -57,7 +57,6 @@
     <downloadSources>true</downloadSources>
     <downloadJavadocs>true</downloadJavadocs>
     <sonar.host.url>https://sq.terrestris.de</sonar.host.url>
-    <sonar.login>terrestris</sonar.login>
     <sonar.sources>src/main/</sonar.sources>
     <maven-core.version>4.0.0-beta-5</maven-core.version>
   </properties>
