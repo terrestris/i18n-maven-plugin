@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
 
@@ -88,8 +87,7 @@ public class I18nFillMojo extends AbstractMojo {
           target = mapper.createObjectNode();
           contents.set(targetLanguage, target);
         }
-        for (Iterator<Entry<String, JsonNode>> it = source.fields(); it.hasNext(); ) {
-          Entry<String, JsonNode> field = it.next();
+        for (Entry<String, JsonNode> field : source.properties()) {
           if (!target.has(field.getKey())) {
             target.put(field.getKey(), targetLanguage + ":" + field.getValue().asText());
           }

@@ -17,7 +17,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
 
@@ -67,8 +66,7 @@ public class I18nCombineMojo extends AbstractMojo {
       if (LOG.isInfoEnabled()) {
         LOG.info("Found i18n languages: {}", Iterators.toString(root.fieldNames()));
       }
-      for (Iterator<Entry<String, JsonNode>> it = root.fields(); it.hasNext(); ) {
-        Entry<String, JsonNode> field = it.next();
+      for (Entry<String, JsonNode> field : root.properties()) {
         mapper.writeValue(new File(outDir, field.getKey() + ".json"), field.getValue());
       }
     } catch (Exception t) {
@@ -84,8 +82,7 @@ public class I18nCombineMojo extends AbstractMojo {
       if (file.getName().endsWith(".i18n.json")) {
         JsonNode current = mapper.readTree(file);
         String name = file.getName().split("\\.")[0];
-        for (Iterator<Entry<String, JsonNode>> it = current.fields(); it.hasNext(); ) {
-          Entry<String, JsonNode> field = it.next();
+        for (Entry<String, JsonNode> field : current.properties()) {
           String lang = field.getKey();
           if (!root.has(lang)) {
             root.set(lang, mapper.createObjectNode());

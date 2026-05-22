@@ -14,7 +14,6 @@ import org.apache.maven.project.MavenProject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Objects;
 
@@ -83,8 +82,7 @@ public class I18nSplitMojo extends AbstractMojo {
         }
         String name = f.getName().split("\\.")[0];
         JsonNode newValues = root.get(name);
-        for (Iterator<Entry<String, JsonNode>> it = newValues.fields(); it.hasNext(); ) {
-          Entry<String, JsonNode> field = it.next();
+        for (Entry<String, JsonNode> field : newValues.properties()) {
           current.set(field.getKey(), field.getValue());
         }
         mapper.writeValue(f, contents);
