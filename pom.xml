@@ -14,36 +14,16 @@
     <tag>HEAD</tag>
   </scm>
 
-  <repositories>
-    <repository>
-      <id>terrestris-repo</id>
-      <url>https://nexus.terrestris.de/repository/public</url>
-      <releases>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
-  <pluginRepositories>
-    <pluginRepository>
-      <id>terrestris-plugins</id>
-      <url>https://nexus.terrestris.de/repository/public</url>
-    </pluginRepository>
-  </pluginRepositories>
-
   <distributionManagement>
     <repository>
-      <id>nexus.terrestris.de-releases</id>
-      <name>Nexus Release Repository</name>
-      <url>https://nexus.terrestris.de/repository/misc/</url>
+      <id>reposilite-repository-releases</id>
+      <name>terrestris Maven repository</name>
+      <url>https://maven.terrestris.de/releases</url>
     </repository>
     <snapshotRepository>
-      <id>nexus.terrestris.de-plugins</id>
-      <name>Nexus Snapshot Repository</name>
-      <url>https://nexus.terrestris.de/repository/misc/</url>
+      <id>reposilite-repository-snapshots</id>
+      <name>terrestris Maven repository</name>
+      <url>https://maven.terrestris.de/snapshots</url>
     </snapshotRepository>
     <site>
       <id>github</id>
