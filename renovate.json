@@ -1,7 +1,12 @@
 {
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:best-practices",
+    ":prHourlyLimitNone",
+    ":prConcurrentLimit20",
+    ":automergeDigest",
+    ":automergeMinor"
   ],
-  "automerge": true,
-  "dependencyDashboardAutoclose": false
+  "labels": ["renovate"]
 }
+
