@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Execute;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -28,7 +26,6 @@ import java.util.Objects;
  * of en:GermanTranslation as value. This can also be used to add
  * a new translation language.
  */
-@Execute(goal = "fill", phase = LifecyclePhase.NONE)
 @Mojo(name = "fill")
 public class I18nFillMojo extends AbstractMojo {
 
