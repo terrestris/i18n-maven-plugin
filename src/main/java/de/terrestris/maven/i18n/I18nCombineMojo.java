@@ -4,11 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Iterators;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Execute;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -17,6 +14,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Objects;
 
@@ -26,7 +25,6 @@ import java.util.Objects;
  * README on <a href="https://github.com/terrestris/i18n-maven-plugin/">Github</a> for details.
  * It is best integrated into your pom in the generate-resources phase.
  */
-@Execute(goal = "combine", phase = LifecyclePhase.GENERATE_RESOURCES)
 @Mojo(name = "combine")
 public class I18nCombineMojo extends AbstractMojo {
 
@@ -64,7 +62,9 @@ public class I18nCombineMojo extends AbstractMojo {
       ObjectNode root = mapper.createObjectNode();
       combineJsonFiles(root, dir);
       if (LOG.isInfoEnabled()) {
-        LOG.info("Found i18n languages: {}", Iterators.toString(root.fieldNames()));
+        List<String> languages = new ArrayList<>();
+        root.fieldNames().forEachRemaining(languages::add);
+        LOG.info("Found i18n languages: {}", languages);
       }
       for (Entry<String, JsonNode> field : root.properties()) {
         mapper.writeValue(new File(outDir, field.getKey() + ".json"), field.getValue());
@@ -88,7 +88,7 @@ public class I18nCombineMojo extends AbstractMojo {
             root.set(lang, mapper.createObjectNode());
           }
           ObjectNode currentMap = (ObjectNode) root.get(lang);
-          currentMap.set(name, field.getValue().get(lang));
+          currentMap.set(name, field.getValue());
         }
       }
     }
