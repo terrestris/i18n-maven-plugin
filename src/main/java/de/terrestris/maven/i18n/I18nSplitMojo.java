@@ -6,8 +6,6 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
-import org.apache.maven.plugins.annotations.Execute;
-import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
@@ -26,7 +24,6 @@ import java.util.Objects;
  *<br>
  * Can also be used to add a new translation.
  */
-@Execute(goal = "split", phase = LifecyclePhase.NONE)
 @Mojo(name = "split")
 public class I18nSplitMojo extends AbstractMojo {
 
