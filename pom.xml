@@ -38,7 +38,7 @@
     <downloadJavadocs>true</downloadJavadocs>
     <sonar.host.url>https://sq.terrestris.de</sonar.host.url>
     <sonar.sources>src/main/</sonar.sources>
-    <maven.version>3.9.11</maven.version>
+    <maven.version>3.10.0</maven.version>
   </properties>
 
 
